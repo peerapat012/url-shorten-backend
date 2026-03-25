@@ -4,7 +4,8 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import 'dotenv/config';
 import { connectRedis } from './config/redis.js';
-import authRoute from './routes/auth.route.js'
+import authRoute from './routes/auth.routes.js'
+import urlRoute from './routes/url.routes.js'
 
 const app: Application = express();
 const PORT = process.env.PORT || 3000;
@@ -22,6 +23,7 @@ app.get('/health', (req: Request, res: Response) => {
 
 // Routes
 app.use('/api/auth', authRoute);
+app.use('/', urlRoute);
 
 const startServer = async () => {
     try {
