@@ -1,9 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-
-interface TokenPayload {
-    userId: string;
-}
+import { JWTPayload } from '../types/auth.type.js';
 
 export interface AuthRequest extends Request {
     userId?: string;
@@ -20,9 +17,10 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
 
     try {
         const secret = process.env.JWT_ACCESS_SECRET || 'fallback_secret';
-        const decoded = jwt.verify(token, secret) as TokenPayload;
+        const decoded = jwt.verify(token, secret) as JWTPayload;
 
         req.userId = decoded.userId;
+
         next();
     } catch (error) {
         res.status(403).json({ message: 'Invalid or expired token.' });
