@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { shorten, redirect } from '../controllers/url.controller.js';
+import { shorten, redirect, getMyUrls } from '../controllers/url.controller.js';
 import { authenticate } from '../middlewares/auth.middleware.js';
 
 const router = Router();
@@ -9,5 +9,8 @@ router.post('/shorten', authenticate, shorten);
 
 // Public: Anyone can be redirected
 router.get('/:shortCode', redirect);
+
+// Protected: Only logged-in users can get their URLs use for dashboard
+router.get('/my-urls', authenticate, getMyUrls);
 
 export default router;
