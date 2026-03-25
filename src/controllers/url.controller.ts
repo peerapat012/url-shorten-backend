@@ -1,7 +1,6 @@
 import { Response } from "express";
 import { AuthRequest } from '../middlewares/auth.middleware.js'
 import { createShortUrl, getOriginalUrl } from '../services/url.service.js'
-import { prisma } from "../config/prisma.js";
 import { getUserUrls } from "../services/user.service.js";
 
 export const shorten = async (req: AuthRequest, res: Response): Promise<void> => {

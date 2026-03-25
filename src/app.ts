@@ -7,7 +7,7 @@ import { connectRedis } from './config/redis.js';
 import authRoute from './routes/auth.routes.js'
 import urlRoute from './routes/url.routes.js'
 
-const app: Application = express();
+export const app: Application = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
@@ -29,9 +29,10 @@ const startServer = async () => {
     try {
         await connectRedis();
 
-        app.listen(PORT, () => {
-            console.log(`[server]: Server is running at http://localhost:${PORT}`);
-        });
+        if (process.env.NODE_ENV !== 'test') {
+            const PORT = process.env.PORT || 3000;
+            app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+        }
     } catch (error) {
         console.error('[server]: Failed to start', error);
         process.exit(1);
