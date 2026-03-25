@@ -29,7 +29,7 @@ export const getOriginalUrl = async (shortCode: string) => {
     if (urlData) {
         await redisClient.setEx(`url:${shortCode}`, 3600, urlData.originalUrl);
 
-        prisma.shortUrl.update({
+        await prisma.shortUrl.update({
             where: { id: urlData.id },
             data: { clicks: { increment: 1 } }
         }).catch(err => console.log('Click update failed', err))

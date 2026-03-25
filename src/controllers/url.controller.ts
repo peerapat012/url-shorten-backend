@@ -38,12 +38,12 @@ export const getMyUrls = async (req: AuthRequest, res: Response): Promise<void> 
     try {
         const userId = req.userId;
 
-        if (userId) {
+        if (!userId) {
             res.status(401).json({ message: 'Unauthorized' });
             return;
         }
 
-        const urls = await getUserUrls(userId!);
+        const urls = await getUserUrls(userId);
         res.status(200).json(urls);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching your URLs' });

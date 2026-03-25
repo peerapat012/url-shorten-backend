@@ -7,10 +7,10 @@ const router = Router();
 // Protected: Only logged-in users can create links
 router.post('/shorten', authenticate, shorten);
 
-// Public: Anyone can be redirected
-router.get('/:shortCode', redirect);
-
 // Protected: Only logged-in users can get their URLs use for dashboard
 router.get('/my-urls', authenticate, getMyUrls);
+
+// Public: Anyone can be redirected
+router.get('/:shortCode', redirect);
 
 export default router;
