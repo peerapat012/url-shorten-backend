@@ -3,6 +3,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import 'dotenv/config';
+import { connectRedis } from './config/redis.js';
+import authRoute from './routes/auth.route.js'
 
 const app: Application = express();
 const PORT = process.env.PORT || 3000;
@@ -18,6 +20,21 @@ app.get('/health', (req: Request, res: Response) => {
     res.status(200).json({ status: 'UP' });
 });
 
-app.listen(PORT, () => {
-    console.log(`[server]: Server is running at http://localhost:${PORT}`);
-});
+// Routes
+app.use('/api/auth', authRoute);
+
+const startServer = async () => {
+    try {
+        await connectRedis();
+
+        app.listen(PORT, () => {
+            console.log(`[server]: Server is running at http://localhost:${PORT}`);
+        });
+    } catch (error) {
+        console.error('[server]: Failed to start', error);
+        process.exit(1);
+    }
+};
+
+
+startServer();
