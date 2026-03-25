@@ -20,7 +20,14 @@ export const createShortUrl = async (originalUrl: string, userId: string) => {
 
 export const getOriginalUrl = async (shortCode: string) => {
     const cachedUrl = await redisClient.get(`url:${shortCode}`);
-    if (cachedUrl) return cachedUrl;
+    if (cachedUrl) {
+        prisma.shortUrl.update({
+            where: { shortCode },
+            data: { clicks: { increment: 1 } }
+        }).catch(err => console.error("Background click update failed:", err));
+
+        return cachedUrl;
+    };
 
     const urlData = await prisma.shortUrl.findUnique({
         where: { shortCode }
